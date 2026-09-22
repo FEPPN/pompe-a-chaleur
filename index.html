@@ -24,7 +24,7 @@
                             light: '#F4F5FF',    /* Fond actif / carte */
                             border: '#E1E2FF',   /* Bordures douces */
                             gray: '#6B7280',     /* Texte inactif */
-                            bg: '#F3F4F6'        /* Fond de la page */
+                            bg: 'transparent'    /* Modifié pour WordPress */
                         }
                     },
                     fontFamily: {
@@ -36,16 +36,6 @@
     </script>
 
     <style>
-        body {
-            background-color: #F3F4F6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 1rem;
-        }
-
         /* Personnalisation du Range Slider pour le remplissage dynamique */
         input[type=range] {
             -webkit-appearance: none;
@@ -53,7 +43,6 @@
             height: 6px;
             border-radius: 999px;
             outline: none;
-            /* Le background sera géré dynamiquement par JS en linear-gradient */
             background: #E5E7EB; 
         }
         
@@ -101,9 +90,11 @@
         }
     </style>
 </head>
+<!-- On retire les styles inline qui gênaient WordPress -->
 <body>
 
-    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-[0_16px_40px_rgba(30,31,77,0.06)] overflow-hidden">
+    <!-- On s'assure que la carte prend bien 100% de la largeur du bloc WordPress et est bien centrée -->
+    <div class="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-[0_16px_40px_rgba(30,31,77,0.06)] overflow-hidden">
         
         <!-- EN-TÊTE BLEU -->
         <div class="bg-pn-blue py-8 px-6 text-center">
