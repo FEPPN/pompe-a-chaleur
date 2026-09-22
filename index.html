@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur Économies Pompe à Chaleur</title>
+    
+    <!-- Importation de la police Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Chargement de Tailwind CSS pour la structure responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration des couleurs Papernest dans Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pn: {
+                            blue: '#5C5EFF',     /* Bleu primaire */
+                            navy: '#1E1F4D',     /* Texte sombre */
+                            light: '#F4F5FF',    /* Fond carte résultat */
+                            border: '#E1E2FF',   /* Bordures douces */
+                            gray: '#6B7280',     /* Texte secondaire */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F9FAFB;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+        }
+
+        /* Personnalisation du Range Slider pour coller au design */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        
+        input[type=range]:focus {
+            outline: none;
+        }
+        
+        /* Piste du slider */
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #E5E7EB; /* Gris clair */
+            border-radius: 999px;
+        }
+        
+        /* Curseur du slider (Thumb) */
+        input[type=range]::-webkit-slider-thumb {
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #5C5EFF;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -9px; /* Centrage vertical par rapport à la piste (24/2 - 6/2 = 9) */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Pour Firefox */
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #E5E7EB;
+            border-radius: 999px;
+        }
+        input[type=range]::-moz-range-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #5C5EFF;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Transitions douces pour les boutons */
+        .btn-chauffage {
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-[0_16px_40px_rgba(30,31,77,0.06)] overflow-hidden">
+        
+        <!-- EN-TÊTE BLEU -->
+        <div class="bg-pn-blue py-8 px-6 text-center">
+            <h2 class="text-white text-2xl md:text-3xl font-extrabold mb-1">Estimez vos économies</h2>
+            <p class="text-white/90 text-sm md:text-base font-semibold uppercase tracking-wider">Avec une pompe à chaleur</p>
+        </div>
+
+        <!-- CONTENU PRINCIPAL -->
+        <div class="p-6 md:p-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                
+                <!-- COLONNE GAUCHE : Saisies -->
+                <div class="flex flex-col space-y-8">
+                    
+                    <!-- Type de chauffage -->
+                    <div>
+                        <label class="block text-pn-navy font-bold mb-4 text-lg">Votre chauffage actuel :</label>
+                        <div class="flex flex-wrap gap-3">
+                            <button type="button" data-type="electrique" class="btn-chauffage flex-1 py-3 px-4 rounded-xl border border-gray-200 text-pn-navy font-semibold hover:border-pn-blue focus:outline-none bg-white">
+                                Électrique
+                            </button>
+                            <button type="button" data-type="gaz" class="btn-chauffage flex-1 py-3 px-4 rounded-xl border-2 border-pn-blue bg-pn-blue text-white font-semibold focus:outline-none shadow-[0_4px_12px_rgba(92,94,255,0.2)]">
+                                Gaz
+                            </button>
+                            <button type="button" data-type="fioul" class="btn-chauffage flex-1 py-3 px-4 rounded-xl border border-gray-200 text-pn-navy font-semibold hover:border-pn-blue focus:outline-none bg-white">
+                                Fioul
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Surface -->
+                    <div>
+                        <label class="block text-pn-navy font-bold mb-4 text-lg">Surface de votre logement :</label>
+                        <div class="relative w-32">
+                            <input type="number" id="surface-input" value="90" min="10" max="500" class="w-full border border-gray-200 rounded-xl py-3 pl-4 pr-10 text-lg font-bold text-pn-navy text-center focus:outline-none focus:border-pn-blue focus:ring-1 focus:ring-pn-blue transition-colors">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-pn-gray font-medium">m²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLONNE DROITE : Résultats -->
+                <div class="flex flex-col justify-between space-y-6">
+                    
+                    <!-- Facture estimée & Slider -->
+                    <div>
+                        <div class="flex justify-between items-end mb-4">
+                            <label class="text-pn-navy font-bold text-lg">Facture annuelle estimée :</label>
+                            <div class="text-pn-navy font-black text-2xl md:text-3xl"><span id="bill-display">1350</span> €</div>
+                        </div>
+                        
+                        <div class="relative pt-2 pb-6">
+                            <!-- Input Range Slider -->
+                            <input type="range" id="bill-slider" min="500" max="8000" step="50" value="1350" class="w-full z-10 relative">
+                            
+                            <!-- Labels min/max -->
+                            <div class="flex justify-between text-xs text-pn-gray font-medium mt-2 absolute w-full left-0">
+                                <span>500€</span>
+                                <span>8000€+</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Boîte de résultat grise/bleue -->
+                    <div class="bg-pn-light border border-pn-border rounded-2xl p-5 md:p-6 flex items-end justify-between mt-auto">
+                        <div class="flex flex-col">
+                            <!-- Badge -->
+                            <span class="bg-blue-100 text-pn-blue text-[0.65rem] font-bold uppercase tracking-wider py-1 px-3 rounded-md w-max mb-3">Économies</span>
+                            <!-- Valeur -->
+                            <div class="text-pn-navy font-black text-3xl md:text-4xl">
+                                <span id="savings-display">-607</span> <span class="text-base font-medium text-pn-gray">€/an</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Bouton Suivant -->
+                        <button class="bg-pn-navy hover:bg-[#111233] text-white font-semibold py-3 px-6 rounded-xl flex items-center transition-colors">
+                            Suivant <span class="ml-2 font-bold text-lg">➔</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Éléments du DOM
+            const btnsChauffage = document.querySelectorAll('.btn-chauffage');
+            const billSlider = document.getElementById('bill-slider');
+            const billDisplay = document.getElementById('bill-display');
+            const surfaceInput = document.getElementById('surface-input');
+            const savingsDisplay = document.getElementById('savings-display');
+
+            // État initial
+            let currentHeatingType = 'gaz';
+            
+            // Facteurs de calcul factices (à adapter selon vos vraies formules)
+            // L'économie = facture_actuelle * facteur
+            const savingsFactors = {
+                'electrique': 0.50, // 50% d'économies
+                'gaz': 0.45,        // 45% d'économies (donne ~607 pour 1350)
+                'fioul': 0.55       // 55% d'économies
+            };
+
+            // Fonction pour mettre à jour l'affichage des économies
+            function updateCalculations() {
+                const currentBill = parseInt(billSlider.value, 10);
+                const surface = parseInt(surfaceInput.value, 10) || 0; // Récupère la surface (bien que non utilisée dans ce calcul simple, elle est dispo)
+                
+                // Calcul
+                const factor = savingsFactors[currentHeatingType];
+                const savings = Math.round(currentBill * factor);
+                
+                // Affichage
+                savingsDisplay.innerText = `-${savings}`;
+            }
+
+            // Gestionnaire des boutons de chauffage
+            btnsChauffage.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // 1. Mettre à jour l'état
+                    currentHeatingType = btn.getAttribute('data-type');
+                    
+                    // 2. Réinitialiser les styles de tous les boutons (état inactif)
+                    btnsChauffage.forEach(b => {
+                        b.classList.remove('border-2', 'border-pn-blue', 'bg-pn-blue', 'text-white', 'shadow-[0_4px_12px_rgba(92,94,255,0.2)]');
+                        b.classList.add('border-gray-200', 'bg-white', 'text-pn-navy');
+                    });
+                    
+                    // 3. Appliquer le style actif au bouton cliqué
+                    btn.classList.remove('border-gray-200', 'bg-white', 'text-pn-navy');
+                    btn.classList.add('border-2', 'border-pn-blue', 'bg-pn-blue', 'text-white', 'shadow-[0_4px_12px_rgba(92,94,255,0.2)]');
+                    
+                    // 4. Recalculer
+                    updateCalculations();
+                });
+            });
+
+            // Gestionnaire du slider de facture
+            billSlider.addEventListener('input', (e) => {
+                // Mettre à jour le texte de la facture
+                billDisplay.innerText = e.target.value;
+                
+                // On pourrait aussi ajouter une logique pour colorer dynamiquement 
+                // la partie gauche de la piste du slider en javascript ici si nécessaire.
+                
+                // Recalculer
+                updateCalculations();
+            });
+
+            // Gestionnaire de l'input surface
+            surfaceInput.addEventListener('input', () => {
+                // Dans la maquette actuelle, la surface ne change pas le calcul, 
+                // mais l'événement est prêt si vous intégrez une formule plus complexe
+                updateCalculations();
+            });
+
+            // Calcul initial au chargement
+            updateCalculations();
+        });
+    </script>
+</body>
+</html>
