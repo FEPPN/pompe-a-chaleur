@@ -10,10 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Chargement de Tailwind CSS pour la structure responsive -->
+    <!-- Chargement de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Configuration des couleurs Papernest dans Tailwind -->
     <script>
         tailwind.config = {
             theme: {
@@ -22,9 +21,9 @@
                         pn: {
                             blue: '#5C5EFF',     /* Bleu primaire */
                             navy: '#1E1F4D',     /* Texte sombre */
-                            light: '#F4F5FF',    /* Fond carte résultat */
+                            light: '#F4F5FF',    /* Fond actif / carte */
                             border: '#E1E2FF',   /* Bordures douces */
-                            gray: '#6B7280',     /* Texte secondaire */
+                            gray: '#6B7280',     /* Texte inactif */
                         }
                     },
                     fontFamily: {
@@ -46,47 +45,35 @@
             padding: 1rem;
         }
 
-        /* Personnalisation du Range Slider pour coller au design */
+        /* Personnalisation du Range Slider pour le remplissage dynamique */
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
-            background: transparent;
-        }
-        
-        input[type=range]:focus {
-            outline: none;
-        }
-        
-        /* Piste du slider */
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
             height: 6px;
-            cursor: pointer;
-            background: #E5E7EB; /* Gris clair */
             border-radius: 999px;
+            outline: none;
+            /* Le background sera géré dynamiquement par JS en linear-gradient */
+            background: #E5E7EB; 
         }
         
-        /* Curseur du slider (Thumb) */
+        /* Curseur du slider (Webkit/Chrome/Safari) */
         input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
             height: 24px;
             width: 24px;
             border-radius: 50%;
             background: #ffffff;
             border: 3px solid #5C5EFF;
             cursor: pointer;
-            -webkit-appearance: none;
-            margin-top: -9px; /* Centrage vertical par rapport à la piste (24/2 - 6/2 = 9) */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
         }
         
-        /* Pour Firefox */
-        input[type=range]::-moz-range-track {
-            width: 100%;
-            height: 6px;
-            cursor: pointer;
-            background: #E5E7EB;
-            border-radius: 999px;
-        }
+        /* Curseur du slider (Firefox) */
         input[type=range]::-moz-range-thumb {
             height: 20px;
             width: 20px;
@@ -94,10 +81,20 @@
             background: #ffffff;
             border: 3px solid #5C5EFF;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: transform 0.1s;
+        }
+        input[type=range]::-moz-range-thumb:hover {
+            transform: scale(1.1);
         }
 
-        /* Transitions douces pour les boutons */
+        /* Enlever la piste par défaut sur Firefox car on gère le fond sur l'input */
+        input[type=range]::-moz-range-track {
+            background: transparent;
+            border: none;
+        }
+
+        /* Transitions douces pour les boutons carrés */
         .btn-chauffage {
             transition: all 0.2s ease-in-out;
         }
@@ -105,84 +102,88 @@
 </head>
 <body>
 
-    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-[0_16px_40px_rgba(30,31,77,0.06)] overflow-hidden">
+    <div class="w-full max-w-3xl bg-white rounded-2xl shadow-[0_16px_40px_rgba(30,31,77,0.06)] overflow-hidden">
         
         <!-- EN-TÊTE BLEU -->
         <div class="bg-pn-blue py-8 px-6 text-center">
             <h2 class="text-white text-2xl md:text-3xl font-extrabold mb-1">Estimez vos économies</h2>
-            <p class="text-white/90 text-sm md:text-base font-semibold uppercase tracking-wider">Avec une pompe à chaleur</p>
+            <p class="text-white/90 text-sm font-semibold uppercase tracking-wider">Avec une pompe à chaleur</p>
         </div>
 
-        <!-- CONTENU PRINCIPAL -->
-        <div class="p-6 md:p-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <!-- CONTENU -->
+        <div class="p-6 md:p-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 
-                <!-- COLONNE GAUCHE : Saisies -->
+                <!-- COLONNE GAUCHE -->
                 <div class="flex flex-col space-y-8">
                     
-                    <!-- Type de chauffage -->
+                    <!-- Boutons d'énergie carrés (96x96px) -->
                     <div>
-                        <label class="block text-pn-navy font-bold mb-4 text-lg">Votre chauffage actuel :</label>
-                        <div class="flex flex-wrap gap-3">
-                            <button type="button" data-type="electrique" class="btn-chauffage flex-1 py-3 px-4 rounded-xl border border-gray-200 text-pn-navy font-semibold hover:border-pn-blue focus:outline-none bg-white">
-                                Électrique
+                        <label class="block text-pn-navy font-bold mb-4 text-base md:text-lg">Votre chauffage actuel :</label>
+                        <div class="flex gap-4">
+                            <!-- Électrique -->
+                            <button type="button" data-type="electrique" class="btn-chauffage w-24 h-24 rounded-xl border-2 flex flex-col items-center justify-center gap-2 focus:outline-none bg-pn-light border-pn-blue text-pn-blue">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                                </svg>
+                                <span class="font-semibold text-sm">Électrique</span>
                             </button>
-                            <button type="button" data-type="gaz" class="btn-chauffage flex-1 py-3 px-4 rounded-xl border-2 border-pn-blue bg-pn-blue text-white font-semibold focus:outline-none shadow-[0_4px_12px_rgba(92,94,255,0.2)]">
-                                Gaz
+                            
+                            <!-- Gaz -->
+                            <button type="button" data-type="gaz" class="btn-chauffage w-24 h-24 rounded-xl border-2 flex flex-col items-center justify-center gap-2 focus:outline-none bg-white border-gray-200 text-pn-gray hover:border-gray-300">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                                </svg>
+                                <span class="font-semibold text-sm">Gaz</span>
                             </button>
-                            <button type="button" data-type="fioul" class="btn-chauffage flex-1 py-3 px-4 rounded-xl border border-gray-200 text-pn-navy font-semibold hover:border-pn-blue focus:outline-none bg-white">
-                                Fioul
+                            
+                            <!-- Fioul -->
+                            <button type="button" data-type="fioul" class="btn-chauffage w-24 h-24 rounded-xl border-2 flex flex-col items-center justify-center gap-2 focus:outline-none bg-white border-gray-200 text-pn-gray hover:border-gray-300">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                                </svg>
+                                <span class="font-semibold text-sm">Fioul</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Surface -->
+                    <!-- Input Surface -->
                     <div>
-                        <label class="block text-pn-navy font-bold mb-4 text-lg">Surface de votre logement :</label>
-                        <div class="relative w-32">
-                            <input type="number" id="surface-input" value="90" min="10" max="500" class="w-full border border-gray-200 rounded-xl py-3 pl-4 pr-10 text-lg font-bold text-pn-navy text-center focus:outline-none focus:border-pn-blue focus:ring-1 focus:ring-pn-blue transition-colors">
+                        <label class="block text-pn-navy font-bold mb-4 text-base md:text-lg">Surface de votre logement :</label>
+                        <div class="relative w-36">
+                            <input type="number" id="surface-input" value="100" min="10" max="500" class="w-full border-2 border-gray-200 rounded-xl py-3 pl-4 pr-10 text-lg font-bold text-pn-navy text-center focus:outline-none focus:border-pn-blue transition-colors">
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-pn-gray font-medium">m²</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- COLONNE DROITE : Résultats -->
-                <div class="flex flex-col justify-between space-y-6">
+                <!-- COLONNE DROITE -->
+                <div class="flex flex-col justify-between space-y-8">
                     
-                    <!-- Facture estimée & Slider -->
+                    <!-- Facture estimée & Slider Dynamique -->
                     <div>
-                        <div class="flex justify-between items-end mb-4">
-                            <label class="text-pn-navy font-bold text-lg">Facture annuelle estimée :</label>
-                            <div class="text-pn-navy font-black text-2xl md:text-3xl"><span id="bill-display">1350</span> €</div>
+                        <div class="flex justify-between items-end mb-5">
+                            <label class="text-pn-navy font-bold text-base md:text-lg">Facture annuelle estimée :</label>
+                            <div class="text-pn-navy font-black text-2xl md:text-3xl"><span id="bill-display">3270</span> €</div>
                         </div>
                         
-                        <div class="relative pt-2 pb-6">
-                            <!-- Input Range Slider -->
-                            <input type="range" id="bill-slider" min="500" max="8000" step="50" value="1350" class="w-full z-10 relative">
+                        <div class="relative pt-2 pb-2">
+                            <!-- Slider interactif -->
+                            <input type="range" id="bill-slider" min="100" max="5000" step="50" value="3270" class="w-full">
                             
-                            <!-- Labels min/max -->
-                            <div class="flex justify-between text-xs text-pn-gray font-medium mt-2 absolute w-full left-0">
-                                <span>500€</span>
-                                <span>8000€+</span>
+                            <div class="flex justify-between text-xs text-pn-gray font-medium mt-3">
+                                <span>100€</span>
+                                <span>5000€</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Boîte de résultat grise/bleue -->
-                    <div class="bg-pn-light border border-pn-border rounded-2xl p-5 md:p-6 flex items-end justify-between mt-auto">
-                        <div class="flex flex-col">
-                            <!-- Badge -->
-                            <span class="bg-blue-100 text-pn-blue text-[0.65rem] font-bold uppercase tracking-wider py-1 px-3 rounded-md w-max mb-3">Économies</span>
-                            <!-- Valeur -->
-                            <div class="text-pn-navy font-black text-3xl md:text-4xl">
-                                <span id="savings-display">-607</span> <span class="text-base font-medium text-pn-gray">€/an</span>
-                            </div>
+                    <!-- Carte de résultat épurée -->
+                    <div class="bg-pn-light border border-pn-border rounded-2xl p-6 text-center mt-auto">
+                        <h3 class="text-pn-blue font-bold uppercase tracking-widest text-xs mb-3">Économies estimées</h3>
+                        <div class="text-pn-navy font-black text-4xl md:text-5xl">
+                            <span id="savings-display">0</span> <span class="text-lg md:text-xl font-semibold text-pn-gray">€ / an</span>
                         </div>
-                        
-                        <!-- Bouton Suivant -->
-                        <button class="bg-pn-navy hover:bg-[#111233] text-white font-semibold py-3 px-6 rounded-xl flex items-center transition-colors">
-                            Suivant <span class="ml-2 font-bold text-lg">➔</span>
-                        </button>
                     </div>
 
                 </div>
@@ -192,79 +193,110 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Éléments du DOM
+            
+            // --- ÉLÉMENTS DU DOM ---
             const btnsChauffage = document.querySelectorAll('.btn-chauffage');
             const billSlider = document.getElementById('bill-slider');
             const billDisplay = document.getElementById('bill-display');
             const surfaceInput = document.getElementById('surface-input');
             const savingsDisplay = document.getElementById('savings-display');
 
-            // État initial
-            let currentHeatingType = 'gaz';
+            // --- VARIABLES & CONSTANTES DE CALCUL ---
+            let currentEnergy = 'electrique';
             
-            // Facteurs de calcul factices (à adapter selon vos vraies formules)
-            // L'économie = facture_actuelle * facteur
-            const savingsFactors = {
-                'electrique': 0.50, // 50% d'économies
-                'gaz': 0.45,        // 45% d'économies (donne ~607 pour 1350)
-                'fioul': 0.55       // 55% d'économies
+            const PRICES = {
+                'electrique': 0.2516,
+                'gaz': 0.115,
+                'fioul': 0.135
             };
+            const KWH_PER_M2 = 130; // Consommation moyenne pour chauffage
+            const HEATING_SHARE = 0.80; // Part du chauffage dans la facture totale (80%)
+            const PAC_COP = 3.5; // Rendement de la pompe à chaleur
 
-            // Fonction pour mettre à jour l'affichage des économies
-            function updateCalculations() {
-                const currentBill = parseInt(billSlider.value, 10);
-                const surface = parseInt(surfaceInput.value, 10) || 0; // Récupère la surface (bien que non utilisée dans ce calcul simple, elle est dispo)
+            // --- FONCTION : Mise à jour du remplissage bleu du curseur ---
+            function updateSliderBackground() {
+                const min = parseInt(billSlider.min);
+                const max = parseInt(billSlider.max);
+                const value = parseInt(billSlider.value);
+                const percentage = ((value - min) / (max - min)) * 100;
                 
-                // Calcul
-                const factor = savingsFactors[currentHeatingType];
-                const savings = Math.round(currentBill * factor);
-                
-                // Affichage
-                savingsDisplay.innerText = `-${savings}`;
+                // Remplissage dynamique : Bleu à gauche, Gris à droite
+                billSlider.style.background = `linear-gradient(to right, #5C5EFF 0%, #5C5EFF ${percentage}%, #E5E7EB ${percentage}%, #E5E7EB 100%)`;
             }
 
-            // Gestionnaire des boutons de chauffage
+            // --- FONCTION : Calcul des économies ---
+            function calculateSavings() {
+                const totalBill = parseInt(billSlider.value, 10);
+                const currentPrice = PRICES[currentEnergy];
+                
+                // 1. Isoler la part chauffage en euros
+                const heatingBill = totalBill * HEATING_SHARE;
+                
+                // 2. Convertir la facture chauffage en kWh selon l'énergie actuelle
+                const heatingKwh = heatingBill / currentPrice;
+                
+                // 3. Calculer la nouvelle consommation avec la PAC (division par le COP)
+                const pacKwh = heatingKwh / PAC_COP;
+                
+                // 4. Calculer le nouveau coût (la PAC fonctionne toujours à l'électricité)
+                const pacCost = pacKwh * PRICES['electrique'];
+                
+                // 5. Calculer les économies (Ancien coût - Nouveau coût)
+                const savings = Math.round(heatingBill - pacCost);
+                
+                // Affichage (si négatif ou nul, on affiche 0 pour ne pas perturber l'utilisateur)
+                savingsDisplay.innerText = savings > 0 ? savings : 0;
+            }
+
+            // --- ÉVÉNEMENT : Clic sur les boutons d'énergie ---
             btnsChauffage.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    // 1. Mettre à jour l'état
-                    currentHeatingType = btn.getAttribute('data-type');
+                    currentEnergy = btn.getAttribute('data-type');
                     
-                    // 2. Réinitialiser les styles de tous les boutons (état inactif)
+                    // Réinitialisation de tous les boutons (état inactif)
                     btnsChauffage.forEach(b => {
-                        b.classList.remove('border-2', 'border-pn-blue', 'bg-pn-blue', 'text-white', 'shadow-[0_4px_12px_rgba(92,94,255,0.2)]');
-                        b.classList.add('border-gray-200', 'bg-white', 'text-pn-navy');
+                        b.classList.remove('bg-pn-light', 'border-pn-blue', 'text-pn-blue');
+                        b.classList.add('bg-white', 'border-gray-200', 'text-pn-gray');
                     });
                     
-                    // 3. Appliquer le style actif au bouton cliqué
-                    btn.classList.remove('border-gray-200', 'bg-white', 'text-pn-navy');
-                    btn.classList.add('border-2', 'border-pn-blue', 'bg-pn-blue', 'text-white', 'shadow-[0_4px_12px_rgba(92,94,255,0.2)]');
+                    // Activation du bouton cliqué
+                    btn.classList.remove('bg-white', 'border-gray-200', 'text-pn-gray');
+                    btn.classList.add('bg-pn-light', 'border-pn-blue', 'text-pn-blue');
                     
-                    // 4. Recalculer
-                    updateCalculations();
+                    // Met à jour les calculs avec la facture actuellement sélectionnée
+                    calculateSavings();
                 });
             });
 
-            // Gestionnaire du slider de facture
-            billSlider.addEventListener('input', (e) => {
-                // Mettre à jour le texte de la facture
-                billDisplay.innerText = e.target.value;
-                
-                // On pourrait aussi ajouter une logique pour colorer dynamiquement 
-                // la partie gauche de la piste du slider en javascript ici si nécessaire.
-                
-                // Recalculer
-                updateCalculations();
-            });
-
-            // Gestionnaire de l'input surface
+            // --- ÉVÉNEMENT : Modification de la surface (met à jour le curseur automatiquement) ---
             surfaceInput.addEventListener('input', () => {
-                // Dans la maquette actuelle, la surface ne change pas le calcul, 
-                // mais l'événement est prêt si vous intégrez une formule plus complexe
-                updateCalculations();
+                const surface = parseInt(surfaceInput.value, 10) || 0;
+                
+                // Calcul de la facture théorique : Surface * (130 kWh) * Prix de l'énergie
+                const theoreticalBill = surface * KWH_PER_M2 * PRICES[currentEnergy];
+                
+                // On met à jour la valeur du curseur (en respectant les limites)
+                let newSliderValue = Math.round(theoreticalBill);
+                if (newSliderValue > 5000) newSliderValue = 5000;
+                if (newSliderValue < 100) newSliderValue = 100;
+                
+                billSlider.value = newSliderValue;
+                billDisplay.innerText = newSliderValue;
+                
+                updateSliderBackground();
+                calculateSavings();
             });
 
-            // Calcul initial au chargement
-            updateCalculations();
+            // --- ÉVÉNEMENT : Déplacement manuel du curseur de la facture ---
+            billSlider.addEventListener('input', (e) => {
+                billDisplay.innerText = e.target.value;
+                updateSliderBackground();
+                calculateSavings();
+            });
+
+            // --- INITIALISATION AU CHARGEMENT ---
+            // Déclencher un événement sur la surface pour initialiser les valeurs correctement
+            surfaceInput.dispatchEvent(new Event('input'));
         });
     </script>
 </body>
