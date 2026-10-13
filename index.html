@@ -50,13 +50,13 @@
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            height: 24px;
-            width: 24px;
+            height: 20px;
+            width: 20px;
             border-radius: 50%;
             background: #ffffff;
             border: 3px solid #5C5EFF;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
             transition: transform 0.1s;
         }
         input[type=range]::-webkit-slider-thumb:hover {
@@ -64,13 +64,13 @@
         }
         
         input[type=range]::-moz-range-thumb {
-            height: 20px;
-            width: 20px;
+            height: 18px;
+            width: 18px;
             border-radius: 50%;
             background: #ffffff;
             border: 3px solid #5C5EFF;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
             transition: transform 0.1s;
         }
         input[type=range]::-moz-range-thumb:hover {
@@ -89,30 +89,31 @@
 </head>
 <body>
 
-    <div style="background-color: #FFFFFF; width: 100%; padding: 40px 0;">
-    <div class="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-[0_16px_40px_rgba(30,31,77,0.06)] overflow-hidden">
+    <div style="background-color: #FFFFFF; width: 100%; padding: 20px 0;">
+    <!-- Passage de max-w-4xl à max-w-3xl pour un outil globalement plus compact -->
+    <div class="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-[0_12px_30px_rgba(30,31,77,0.06)] overflow-hidden border border-gray-100">
         
-        <!-- EN-TÊTE BLEU -->
-        <div class="bg-pn-blue py-8 px-6 text-center">
-            <h2 class="text-white text-2xl md:text-3xl font-extrabold mb-1">Estimez vos économies</h2>
-            <p class="text-white/90 text-sm font-semibold uppercase tracking-wider">Avec une pompe à chaleur</p>
+        <!-- EN-TÊTE BLEU (Plus fin) -->
+        <div class="bg-pn-blue py-5 px-6 text-center">
+            <h2 class="text-white text-xl md:text-2xl font-extrabold mb-0.5">Estimez vos économies</h2>
+            <p class="text-white/90 text-xs font-semibold uppercase tracking-wider">Avec une pompe à chaleur</p>
         </div>
 
         <!-- CONTENU -->
-        <div class="p-6 md:p-10">
+        <div class="p-5 md:p-8">
             
-            <!-- EN HAUT : Facture estimée & Slider Dynamique (Prend toute la largeur) -->
-            <div class="mb-10 pb-8 border-b border-gray-100">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-6 gap-2">
-                    <label class="text-pn-navy font-bold text-lg md:text-xl leading-tight">Facture annuelle estimée :</label>
-                    <div class="text-pn-navy font-black text-3xl md:text-4xl whitespace-nowrap">
+            <!-- EN HAUT : Facture estimée (Marges et textes réduits) -->
+            <div class="mb-6 pb-6 border-b border-gray-100">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-4 gap-2">
+                    <label class="text-pn-navy font-bold text-base md:text-lg leading-tight">Facture annuelle estimée :</label>
+                    <div class="text-pn-navy font-black text-2xl md:text-3xl whitespace-nowrap">
                         <span id="bill-display">3270</span> €
                     </div>
                 </div>
                 
-                <div class="relative pt-2 pb-2">
+                <div class="relative pt-1 pb-1">
                     <input type="range" id="bill-slider" min="100" max="8000" step="50" value="3270" class="w-full">
-                    <div class="flex justify-between text-xs text-pn-gray font-medium mt-4">
+                    <div class="flex justify-between text-[11px] text-pn-gray font-medium mt-2">
                         <span>100€</span>
                         <span>8000€</span>
                     </div>
@@ -120,55 +121,55 @@
             </div>
 
             <!-- EN BAS : Grille (Paramètres restants à gauche, Résultat à droite) -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
                 
                 <!-- COLONNE GAUCHE : Énergie & Surface -->
-                <div class="md:col-span-7 flex flex-col space-y-8">
+                <div class="md:col-span-7 flex flex-col space-y-6 justify-center">
                     
-                    <!-- Boutons d'énergie carrés -->
+                    <!-- Boutons d'énergie (Désormais rectangulaires) -->
                     <div>
-                        <label class="block text-pn-navy font-bold mb-4 text-base md:text-lg">Votre chauffage actuel :</label>
-                        <div class="flex gap-4">
-                            <button type="button" data-type="electrique" class="btn-chauffage w-24 h-24 rounded-xl border-2 flex items-center justify-center focus:outline-none bg-pn-blue border-pn-blue text-white shadow-md">
+                        <label class="block text-pn-navy font-bold mb-3 text-sm md:text-base">Votre chauffage actuel :</label>
+                        <div class="flex gap-2 sm:gap-3">
+                            <button type="button" data-type="electrique" class="btn-chauffage flex-1 h-11 rounded-lg border-2 flex items-center justify-center focus:outline-none bg-pn-blue border-pn-blue text-white shadow-sm">
                                 <span class="font-semibold text-sm">Électrique</span>
                             </button>
                             
-                            <button type="button" data-type="gaz" class="btn-chauffage w-24 h-24 rounded-xl border-2 flex items-center justify-center focus:outline-none bg-white border-gray-200 text-pn-navy hover:border-gray-300">
+                            <button type="button" data-type="gaz" class="btn-chauffage flex-1 h-11 rounded-lg border-2 flex items-center justify-center focus:outline-none bg-white border-gray-200 text-pn-navy hover:border-gray-300">
                                 <span class="font-semibold text-sm">Gaz</span>
                             </button>
                             
-                            <button type="button" data-type="fioul" class="btn-chauffage w-24 h-24 rounded-xl border-2 flex items-center justify-center focus:outline-none bg-white border-gray-200 text-pn-navy hover:border-gray-300">
+                            <button type="button" data-type="fioul" class="btn-chauffage flex-1 h-11 rounded-lg border-2 flex items-center justify-center focus:outline-none bg-white border-gray-200 text-pn-navy hover:border-gray-300">
                                 <span class="font-semibold text-sm">Fioul</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Input Surface -->
+                    <!-- Input Surface (Plus compact) -->
                     <div>
-                        <label class="block text-pn-navy font-bold mb-4 text-base md:text-lg">Surface de votre logement :</label>
-                        <div class="relative w-40">
-                            <input type="number" id="surface-input" value="100" min="10" max="500" class="w-full border-2 border-gray-200 rounded-xl py-3 pl-4 pr-10 text-lg font-bold text-pn-navy text-center focus:outline-none focus:border-pn-blue transition-colors">
-                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-pn-gray font-medium">m²</span>
+                        <label class="block text-pn-navy font-bold mb-3 text-sm md:text-base">Surface de votre logement :</label>
+                        <div class="relative w-32">
+                            <input type="number" id="surface-input" value="100" min="10" max="500" class="w-full border-2 border-gray-200 rounded-lg py-2 pl-3 pr-8 text-base font-bold text-pn-navy text-center focus:outline-none focus:border-pn-blue transition-colors">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-pn-gray font-medium text-sm">m²</span>
                         </div>
                     </div>
 
                 </div>
 
                 <!-- COLONNE DROITE : La carte de résultat -->
-                <div class="md:col-span-5 flex flex-col h-full">
+                <div class="md:col-span-5 flex flex-col">
                     
-                    <!-- Carte de résultat épurée, prenant toute la hauteur -->
-                    <div class="bg-pn-light rounded-2xl p-6 md:p-8 text-center flex-1 flex flex-col justify-center border border-pn-border h-full">
-                        <h3 class="text-pn-blue font-bold uppercase tracking-widest text-xs mb-4">Économies estimées</h3>
+                    <!-- Carte de résultat très épurée et compacte -->
+                    <div class="bg-pn-light rounded-xl p-5 text-center flex-1 flex flex-col justify-center border border-pn-border">
+                        <h3 class="text-pn-blue font-bold uppercase tracking-widest text-[11px] mb-2">Économies estimées</h3>
                         
-                        <div class="text-pn-navy font-black text-4xl md:text-5xl whitespace-nowrap mb-8">
-                            <span id="savings-display">0</span> <span class="text-xl md:text-2xl font-bold text-pn-navy">€</span> <span class="text-base md:text-lg font-medium text-pn-gray">/ an</span>
+                        <div class="text-pn-navy font-black text-3xl md:text-4xl whitespace-nowrap mb-5">
+                            <span id="savings-display">0</span> <span class="text-lg md:text-xl font-bold text-pn-navy">€</span> <span class="text-sm font-medium text-pn-gray">/ an</span>
                         </div>
 
-                        <!-- BOUTON ÉPURÉ -->
+                        <!-- BOUTON ÉPURÉ (Taille réduite) -->
                         <div class="mt-auto">
-                            <a href="tel:+33970252261" class="inline-flex items-center justify-center w-full bg-pn-blue text-white font-semibold text-base py-3.5 px-4 rounded-xl shadow-sm hover:bg-[#4A4CFF] hover:shadow-md transition-all duration-200">
-                                <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <a href="tel:+33970252261" class="inline-flex items-center justify-center w-full bg-pn-blue text-white font-semibold text-sm py-3 px-3 rounded-lg shadow-sm hover:bg-[#4A4CFF] hover:shadow-md transition-all duration-200">
+                                <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                                 </svg>
                                 Contacter papernest
