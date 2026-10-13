@@ -90,10 +90,9 @@
 <body>
 
     <div style="background-color: #FFFFFF; width: 100%; padding: 20px 0;">
-    <!-- Passage de max-w-4xl à max-w-3xl pour un outil globalement plus compact -->
     <div class="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-[0_12px_30px_rgba(30,31,77,0.06)] overflow-hidden border border-gray-100">
         
-        <!-- EN-TÊTE BLEU (Plus fin) -->
+        <!-- EN-TÊTE BLEU -->
         <div class="bg-pn-blue py-5 px-6 text-center">
             <h2 class="text-white text-xl md:text-2xl font-extrabold mb-0.5">Estimez vos économies</h2>
             <p class="text-white/90 text-xs font-semibold uppercase tracking-wider">Avec une pompe à chaleur</p>
@@ -102,11 +101,11 @@
         <!-- CONTENU -->
         <div class="p-5 md:p-8">
             
-            <!-- EN HAUT : Facture estimée (Marges et textes réduits) -->
+            <!-- EN HAUT : Facture estimée (Le prix a été réduit pour laisser la vedette au résultat) -->
             <div class="mb-6 pb-6 border-b border-gray-100">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-4 gap-2">
                     <label class="text-pn-navy font-bold text-base md:text-lg leading-tight">Facture annuelle estimée :</label>
-                    <div class="text-pn-navy font-black text-2xl md:text-3xl whitespace-nowrap">
+                    <div class="text-pn-navy font-bold text-xl md:text-2xl whitespace-nowrap">
                         <span id="bill-display">3270</span> €
                     </div>
                 </div>
@@ -120,13 +119,13 @@
                 </div>
             </div>
 
-            <!-- EN BAS : Grille (Paramètres restants à gauche, Résultat à droite) -->
+            <!-- EN BAS : Grille (Paramètres à gauche, Résultat à droite) -->
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
                 
                 <!-- COLONNE GAUCHE : Énergie & Surface -->
                 <div class="md:col-span-7 flex flex-col space-y-6 justify-center">
                     
-                    <!-- Boutons d'énergie (Désormais rectangulaires) -->
+                    <!-- Boutons d'énergie -->
                     <div>
                         <label class="block text-pn-navy font-bold mb-3 text-sm md:text-base">Votre chauffage actuel :</label>
                         <div class="flex gap-2 sm:gap-3">
@@ -144,7 +143,7 @@
                         </div>
                     </div>
 
-                    <!-- Input Surface (Plus compact) -->
+                    <!-- Input Surface -->
                     <div>
                         <label class="block text-pn-navy font-bold mb-3 text-sm md:text-base">Surface de votre logement :</label>
                         <div class="relative w-32">
@@ -158,15 +157,15 @@
                 <!-- COLONNE DROITE : La carte de résultat -->
                 <div class="md:col-span-5 flex flex-col">
                     
-                    <!-- Carte de résultat très épurée et compacte -->
+                    <!-- Carte de résultat (Le prix a été grossi pour être au centre de l'attention) -->
                     <div class="bg-pn-light rounded-xl p-5 text-center flex-1 flex flex-col justify-center border border-pn-border">
                         <h3 class="text-pn-blue font-bold uppercase tracking-widest text-[11px] mb-2">Économies estimées</h3>
                         
-                        <div class="text-pn-navy font-black text-3xl md:text-4xl whitespace-nowrap mb-5">
-                            <span id="savings-display">0</span> <span class="text-lg md:text-xl font-bold text-pn-navy">€</span> <span class="text-sm font-medium text-pn-gray">/ an</span>
+                        <div class="text-pn-navy font-black text-4xl md:text-5xl whitespace-nowrap mb-5">
+                            <span id="savings-display">0</span> <span class="text-2xl md:text-3xl font-bold text-pn-navy">€</span> <span class="text-sm font-medium text-pn-gray">/ an</span>
                         </div>
 
-                        <!-- BOUTON ÉPURÉ (Taille réduite) -->
+                        <!-- BOUTON ÉPURÉ -->
                         <div class="mt-auto">
                             <a href="tel:+33970252261" class="inline-flex items-center justify-center w-full bg-pn-blue text-white font-semibold text-sm py-3 px-3 rounded-lg shadow-sm hover:bg-[#4A4CFF] hover:shadow-md transition-all duration-200">
                                 <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
